@@ -18,7 +18,7 @@ struct Inimigo {
     int cooldown;
 };
 
-void spawnInimigos(vector<Inimigo>& inimigos, int quantidade, int mapa[20][50]) {
+void spawnInimigos(vector<Inimigo>& inimigos, int quantidade, int mapa[20][50], int vidaBase, int danoBase) {
     inimigos.clear();
     for (int i = 0; i < quantidade; i++) {
         Inimigo inimigo;
@@ -54,12 +54,13 @@ void spawnInimigos(vector<Inimigo>& inimigos, int quantidade, int mapa[20][50]) 
             inimigo.y = 25;
         }
 
-        inimigo.vida = 5;
-        inimigo.dano = 0;
+        inimigo.vida = vidaBase;
+        inimigo.dano = danoBase;
         inimigo.ativo = true;
         inimigo.simbolo = char(234);
         inimigo.cooldown = 20;
         inimigos.push_back(inimigo);
+        cout << "Inimigo criado com vida: " << vidaBase << " e dano: " << danoBase << endl;
     }
 }
 

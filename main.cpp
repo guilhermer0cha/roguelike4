@@ -9,6 +9,9 @@
 #include "powerups.h"
 #include "jogo.h"
 
+int vidaInimigoBase = 5; 
+int danoInimigoBase = 0; 
+
 using namespace std;
 
 int main(){
@@ -38,12 +41,16 @@ int main(){
     jogador.x = 10;
     jogador.y = 25;
     jogador.raioDeVisao = 8;
-    jogador.vida = 20;
-    jogador.dano = 10;
+    jogador.vida = 5;
+    jogador.dano = 1;
     jogador.simbolo = char(64);
     jogador.ultimaDirecao = DIREITA;
     jogador.cooldown = 0;
     jogador.score = 0;
+
+    Inimigo inimigo;
+    inimigo.vida;
+    inimigo.dano;
 
     vector<Inimigo> inimigos;
     vector<Projetil> projeteis;
@@ -58,22 +65,50 @@ int main(){
 
     int opcao = -1;
     while (opcao != 1) {
-        exibirMenu();
-        cin >> opcao;
-        switch (opcao) {
-            case 1:
-                break;
-            case 2:
-                mostrarComoJogar();
-                break;
-            case 3:
-                mostrarPowerUps();
-                break;
-            case 0:
-                cout << "Saindo do jogo...\n";
-                return 0;
-            default:
-                cout << "Opcao invalida! Tente novamente.\n";
+    exibirMenu();
+    cin >> opcao;
+    switch (opcao) {
+        case 1: {
+            int dificuldade = exibirDificuldade();
+            switch (dificuldade) {
+                case 1: // Fácil
+                    vidaInimigoBase = 1;
+                    danoInimigoBase = 1;
+                    break;
+                case 2: // Médio
+                    vidaInimigoBase = 2;
+                    danoInimigoBase = 2;
+                    break;
+                case 3: // Difícil
+                    vidaInimigoBase = 3;
+                    danoInimigoBase = 3;
+                    break;
+                default:
+                    cout << "Dificuldade inválida! Usando Fácil como padrão.\n";
+                    vidaInimigoBase = 1;
+                    danoInimigoBase = 1;
+                    _getch();
+                    break;
+            }
+            opcao = 1; // Sai do loop para iniciar o jogo
+            break;
+        }
+        case 2: {
+            mostrarComoJogar();
+            break;
+        }
+        case 3: {
+            mostrarPowerUps();
+            break;
+        }
+        case 0: {
+            cout << "Saindo do jogo...\n";
+            return 0;
+        }
+        default: {
+            cout << "Opção inválida! Tente novamente.\n";
+            break;
+            }
         }
     }
 
@@ -87,7 +122,7 @@ int main(){
             jogador.y = 25;
             jogador.cooldown = 0; 
             ondaAtual++;
-            spawnInimigos(inimigos, inimigosPorOnda, mapa); 
+            spawnInimigos(inimigos, inimigosPorOnda, mapa, vidaInimigoBase, danoInimigoBase); 
             inimigosPorOnda += 2;
             novaOnda = false;
             if(ondaAtual == 1){
@@ -105,7 +140,7 @@ int main(){
         // verifica colisão de projéteis com o jogador
         for (auto i = projeteis.begin(); i != projeteis.end();) {
             if (i->x == jogador.x && i->y == jogador.y) {
-                jogador.vida -= 1; // dano do projétil inimigo
+                jogador.vida -= danoInimigoBase; // dano do projétil inimigo
                 jogador.score -= 1; // -1 ponto por dano sofrido
                 if (jogador.score < 0) jogador.score = 0; 
                 i = projeteis.erase(i);

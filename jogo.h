@@ -54,4 +54,16 @@ void mostrarPowerUps() {
     _getch();
 }
 
+int exibirDificuldade() {
+    system("cls");
+    cout << "=============== DIFICULDADES ===============\n";
+    cout << "1. Facil\n";
+    cout << "2. Medio\n";
+    cout << "3. Dificil\n";
+    cout << "Escolha uma dificuldade: ";
+    int escolha;
+    cin >> escolha;
+    return escolha;
+}
+
 #endif
